@@ -52,6 +52,8 @@ void Scene::Initialize() {
 	body.shape = new ShapeSphere( 1.0f );
 	body.inverseMass = 1.0f;
 	body.elasticity = 0.5f;
+	body.friction = 0.5f;
+	body.linearVelocity = Vec3(1, 0, 0);
 	bodies.push_back( body );
 
 	Body earth;
@@ -60,6 +62,7 @@ void Scene::Initialize() {
 	earth.shape = new ShapeSphere(1000.0f);
 	earth.inverseMass = 0.0f;
 	earth.elasticity = 1.0f;
+	earth.friction = 0.5f;
 	bodies.push_back(earth);
 }
 
@@ -106,6 +109,6 @@ void Scene::Update( const float dt_sec ) {
 
 	// Position update
 	for (int i = 0; i < bodies.size(); ++i) {
-		bodies[i].position += bodies[i].linearVelocity * dt_sec;
+		bodies[i].Update(dt_sec);
 	}
 }

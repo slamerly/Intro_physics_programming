@@ -7,6 +7,7 @@ public:
 	};
 
 	virtual ShapeType GetType() const = 0;
+	virtual Mat3 InertiaTensor() const = 0;
 	Vec3 GetCenterOfMass() const { return massCenter; }
 
 protected:
@@ -19,7 +20,8 @@ public:
 	{
 		massCenter.Zero();
 	}
-
+	
+	Mat3 InertiaTensor() const override;
 	ShapeType GetType() const override { return ShapeType::SHAPE_SPHERE; }
 	
 	float radius;
