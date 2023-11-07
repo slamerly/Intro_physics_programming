@@ -75,6 +75,7 @@
     <ClCompile Include="Intersections.cpp" />
     <ClCompile Include="Contact.cpp" />
     <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Broadphase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\application.h">
@@ -145,6 +146,7 @@
     </ClInclude>
     <ClInclude Include="Intersections.h" />
     <ClInclude Include="Contact.h" />
+    <ClInclude Include="Broadphase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

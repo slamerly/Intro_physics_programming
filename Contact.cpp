@@ -68,10 +68,26 @@ void Contact::ResolveContact(Contact& contact)
 	b->ApplyImpulse(ptOnB, impulseFriction * 1.0f);
 
 	// If object are interpenetrating, use this to set them on contact
-	const float tA = invMassA / (invMassA + invMassB);
-	const float tB = invMassB / (invMassA + invMassB);
-	const Vec3 d = contact.ptOnBWorldSpace - contact.ptOnAWorldSpace;
+	if (contact.timeOfImpact == 0.0f)
+	{
+		const float tA = invMassA / (invMassA + invMassB);
+		const float tB = invMassB / (invMassA + invMassB);
+		const Vec3 d = contact.ptOnBWorldSpace - contact.ptOnAWorldSpace;
 
-	a->position += d * tA;
-	b->position -= d * tB;
+		a->position += d * tA;
+		b->position -= d * tB;
+	}
+}
+
+int Contact::CompareContact(const void* p1, const void* p2)
+{
+	const Contact& a = *(Contact*)p1;
+	const Contact& b = *(Contact*)p1;
+	if (a.timeOfImpact < b.timeOfImpact) {
+		return -1;
+	}
+	else if (a.timeOfImpact == b.timeOfImpact) {
+		return -0;
+	}
+	return 1;
 }
