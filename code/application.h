@@ -90,6 +90,8 @@ private:
 	static const int WINDOW_HEIGHT = 720;
 
 	static const bool m_enableLayers = true;
+
+	bool exit = false;
 };
 
 extern Application * application;

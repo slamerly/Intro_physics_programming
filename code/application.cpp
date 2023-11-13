@@ -437,6 +437,9 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 	if ( GLFW_KEY_Y == key && ( GLFW_PRESS == action || GLFW_REPEAT == action ) ) {
 		m_stepFrame = m_isPaused && !m_stepFrame;
 	}
+	if (GLFW_KEY_ESCAPE == key && GLFW_RELEASE == action) {
+		exit = true;
+	}
 }
 
 /*
@@ -450,7 +453,7 @@ void Application::MainLoop() {
 	static float avgTime = 0.0f;
 	static float maxTime = 0.0f;
 
-	while ( !glfwWindowShouldClose( glfwWindow ) ) {
+	while ( !glfwWindowShouldClose( glfwWindow ) && !exit) {
 		int time					= GetTimeMicroseconds();
 		float dt_us					= (float)time - (float)timeLastFrame;
 		if ( dt_us < 16000.0f ) {

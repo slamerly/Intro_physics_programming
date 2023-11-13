@@ -48,14 +48,83 @@ Scene::Initialize
 */
 void Scene::Initialize() {
 	Body body;
-	for (int i = 0; i < 6; ++i)
+
+	// Arene
+	for (int i = 0; i < 7; ++i)
 	{
-		for (int j = 0; j < 6; ++j)
+		for (int j = 0; j < 5; ++j)
+		{
+			float radius = 50.0f;
+			float x = (i - 1) * radius * 0.25f;
+			float y = (j - 2) * radius * 0.25f;
+
+			if (i == 0)
+			{
+				x = (i - 2) * radius * 0.25f;
+				y = (j - 2) * radius * 0.5f;
+				body.position = Vec3(x, y, -7.5f);
+				body.shape = new ShapeSphere(15.0f);
+			}
+			else if (i == 6)
+			{
+				x = (i) * radius * 0.25f;
+				y = (j - 2) * radius * 0.5f;
+				body.position = Vec3(x, y, -7.5f);
+				body.shape = new ShapeSphere(15.0f);
+			}
+			else if (j == 0)
+			{
+				x = (i - 1)*radius * 0.25f;
+				y = (j - 1.5) * radius * 0.5f;
+				body.position = Vec3(x, y, -7.5f);
+				body.shape = new ShapeSphere(15.0f);
+			}
+			else if (j == 4)
+			{
+				x = (i - 1) * radius * 0.25f;
+				y = (j - 2.5) * radius * 0.5f;
+				body.position = Vec3(x, y, -7.5f);
+				body.shape = new ShapeSphere(15.0f);
+			}
+			else
+			{
+				body.position = Vec3(x, y, -radius);
+				body.shape = new ShapeSphere(radius);
+			}
+			
+			body.orientation = Quat(0, 0, 0, 1);
+			body.inverseMass = 0.0f;
+			body.elasticity = 0.99f;
+			body.friction = 0.5f;
+			bodies.push_back(body);
+		}
+	}
+	/*for (int i = 0; i < 10; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			float radius = 100.0f;
+			float x = (i - 1) * radius * 0.25f;
+			float y = (j - 2) * radius * 0.25f;
+			body.position = Vec3(x / 2, y / 3, -radius);
+			body.orientation = Quat(0, 0, 0, 1);
+			body.shape = new ShapeSphere(radius);
+			body.inverseMass = 0.0f;
+			body.elasticity = 0.99f;
+			body.friction = 0.5f;
+			bodies.push_back(body);
+		}
+	}*/
+
+	// Player balls
+	/*for (int i = 0; i < 2; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
 		{
 			float radius = 0.5f;
 			float x = (i - 1) * radius * 1.5f;
 			float y = (j - 1) * radius * 1.5f;
-			body.position = Vec3(x, y, 10);
+			body.position = Vec3(x, y, 5);
 			body.orientation = Quat(0, 0, 0, 1);
 			body.shape = new ShapeSphere(radius);
 			body.inverseMass = 1.0f;
@@ -64,24 +133,20 @@ void Scene::Initialize() {
 			body.linearVelocity.Zero();
 			bodies.push_back(body);
 		}
-	}
+	}*/
 
-	for (int i = 0; i < 3; ++i)
-	{
-		for (int j = 0; j < 3; ++j)
-		{
-			float radius = 80.0f;
-			float x = (i - 1) * radius * 0.25f;
-			float y = (j - 1) * radius * 0.25f;
-			body.position = Vec3(x, y, -radius);
-			body.orientation = Quat(0, 0, 0, 1);
-			body.shape = new ShapeSphere(radius);
-			body.inverseMass = 0.0f;
-			body.elasticity = 0.99f;
-			body.friction = 0.5f;
-			bodies.push_back(body);
-		}
-	}
+	// Cochonnet
+	float radius = 0.2f;
+	body.position = Vec3(0, 0, 5);
+	body.orientation = Quat(0, 0, 0, 1);
+	body.shape = new ShapeSphere(radius);
+	body.inverseMass = 1.0f;
+	body.elasticity = 0.5f;
+	body.friction = 0.5f;
+	body.linearVelocity.Zero();
+	body.ApplyImpulseLinear(Vec3(10, 0, 0));
+	bodies.push_back(body);
+
 }
 
 /*
