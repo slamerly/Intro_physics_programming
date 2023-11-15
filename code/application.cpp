@@ -21,6 +21,7 @@ Application * application = NULL;
 
 #include <time.h>
 #include <windows.h>
+#include <iostream>
 
 static bool gIsInitialized( false );
 static unsigned __int64 gTicksPerSecond;
@@ -72,7 +73,7 @@ void Application::Initialize() {
 	InitializeGLFW();
 	InitializeVulkan();
 
-	scene = new Scene;
+	scene = new Scene(this);
 	scene->Initialize();
 	scene->Reset();
 
@@ -86,9 +87,11 @@ void Application::Initialize() {
 	}
 
 	m_mousePosition = Vec2( 0, 0 );
-	m_cameraPositionTheta = acosf( -1.0f ) / 2.0f;
-	m_cameraPositionPhi = 0;
-	m_cameraRadius = 15.0f;
+	//m_cameraPositionTheta = acosf( -1.0f ) / 2.0f;
+	m_cameraPositionTheta = 1;
+	m_cameraPositionPhi = 1;
+	//m_cameraRadius = 15.0f;
+	m_cameraRadius = 10.0f;
 	m_cameraFocusPoint = Vec3( 0, 0, 3 );
 
 	m_isPaused = true;
@@ -406,10 +409,10 @@ Application::MouseScrolled
 ====================================================
 */
 void Application::MouseScrolled( float z ) {
-	m_cameraRadius -= z;
+	/*m_cameraRadius -= z;
 	if ( m_cameraRadius < 0.5f ) {
 		m_cameraRadius = 0.5f;
-	}
+	}*/
 }
 
 /*
@@ -440,6 +443,17 @@ void Application::Keyboard( int key, int scancode, int action, int modifiers ) {
 	if (GLFW_KEY_ESCAPE == key && GLFW_RELEASE == action) {
 		exit = true;
 	}
+	if (GLFW_KEY_SPACE == key && GLFW_RELEASE == action) {
+		scene->Shoot();
+	}
+	if (GLFW_KEY_DOWN == key && GLFW_RELEASE == action) {
+		scene->userPower = scene->userPower - 0.1f;
+		std::cout << "Actual power: " << scene->userPower << std::endl;
+	}
+	if (GLFW_KEY_UP == key && GLFW_RELEASE == action) {
+		scene->userPower = scene->userPower + 0.1f;
+		std::cout << "Actual power: " << scene->userPower << std::endl;
+	}
 }
 
 /*
@@ -463,7 +477,7 @@ void Application::MainLoop() {
 			time = GetTimeMicroseconds();
 		}
 		timeLastFrame = time;
-		printf( "\ndt_ms: %.1f    ", dt_us * 0.001f );
+		//printf( "\ndt_ms: %.1f    ", dt_us * 0.001f );
 
 		// Get User Input
 		glfwPollEvents();
@@ -505,7 +519,7 @@ void Application::MainLoop() {
 			avgTime = ( avgTime * float( numSamples ) + dt_us ) / float( numSamples + 1 );
 			numSamples++;
 
-			printf( "frame dt_ms: %.2f %.2f %.2f", avgTime * 0.001f, maxTime * 0.001f, dt_us * 0.001f );
+			//printf( "frame dt_ms: %.2f %.2f %.2f", avgTime * 0.001f, maxTime * 0.001f, dt_us * 0.001f );
 		}
 
 		// Draw the Scene
@@ -543,7 +557,7 @@ void Application::UpdateUniforms() {
 		// Update the uniform buffer with the camera information
 		//
 		{
-			Vec3 camPos = Vec3( 10, 0, 5 ) * 1.25f;
+			camPos = Vec3( 10, 0, 5 ) * 1.25f;
 			Vec3 camLookAt = Vec3( 0, 0, 1 );
 			Vec3 camUp = Vec3( 0, 0, 1 );
 
@@ -555,6 +569,8 @@ void Application::UpdateUniforms() {
 			camPos += m_cameraFocusPoint;
 
 			camLookAt = m_cameraFocusPoint;
+
+			//std::cout << camPos.x << ", " << camPos.y << ", " << camPos.z << std::endl;
 
 			int windowWidth;
 			int windowHeight;
@@ -583,7 +599,7 @@ void Application::UpdateUniforms() {
 		// Update the uniform buffer with the shadow camera information
 		//
 		{
-			Vec3 camPos = Vec3( 1, 1, 1 ) * 75.0f;
+			Vec3 camPoss = Vec3( 1, 1, 1 ) * 75.0f;
 			Vec3 camLookAt = Vec3( 0, 0, 0 );
 			Vec3 camUp = Vec3( 0, 0, 1 );
 			Vec3 tmp = camPos.Cross( camUp );
@@ -604,7 +620,7 @@ void Application::UpdateUniforms() {
 			camera.matProj.OrthoVulkan( xmin, xmax, ymin, ymax, zNear, zFar );
 			camera.matProj = camera.matProj.Transpose();
 
-			camera.matView.LookAt( camPos, camLookAt, camUp );
+			camera.matView.LookAt( camPoss, camLookAt, camUp );
 			camera.matView = camera.matView.Transpose();
 
 			// Update the uniform buffer for the camera matrices

@@ -16,6 +16,9 @@ public:
 	float friction;
 	Shape* shape;
 
+	// game
+	int cptz = 0;
+
 	void ApplyImpulseLinear(const Vec3& impulse);
 	void ApplyImpulseAngular(const Vec3& impulse);
 

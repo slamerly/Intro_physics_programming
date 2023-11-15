@@ -28,7 +28,15 @@ void Body::ApplyImpulseAngular(const Vec3& impulse)
 
 void Body::Update(const float dt_sec)
 {
-	position += linearVelocity * dt_sec;
+	//if(trunc(linearVelocity.x) != 0 || trunc(linearVelocity.y) != 0 || trunc(linearVelocity.z) != 0)
+	if (trunc(linearVelocity.x) == 0 && trunc(linearVelocity.y) == 0 && trunc(linearVelocity.z) == 0)
+	{
+		angularVelocity.Zero();
+	}
+	else
+	{
+		position += linearVelocity * dt_sec;
+	}
 
 	// We have an angular velocity around the center of mass,
 	// this needs to be converted to relative to model position.
@@ -45,10 +53,8 @@ void Body::Update(const float dt_sec)
 	// T = Ia = w x I * w
 	// a = I^-1 (w x I * w)
 	Mat3 orientationMat = orientation.ToMat3();
-	Mat3 inertiaTensor = orientationMat
-		* shape->InertiaTensor() * orientationMat.Transpose();
-		Vec3 alpha = inertiaTensor.Inverse()
-		* (angularVelocity.Cross(inertiaTensor * angularVelocity));
+	Mat3 inertiaTensor = orientationMat * shape->InertiaTensor() * orientationMat.Transpose();
+	Vec3 alpha = inertiaTensor.Inverse() * (angularVelocity.Cross(inertiaTensor * angularVelocity));
 	angularVelocity += alpha * dt_sec;
 
 	// Update orientation

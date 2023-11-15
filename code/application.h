@@ -32,6 +32,9 @@ public:
 	void Initialize();
 	void MainLoop();
 
+	Vec3 getCamPos() { return camPos; }
+	Vec3 m_cameraFocusPoint;
+
 private:
 	std::vector< const char * > GetGLFWRequiredExtensions() const;
 
@@ -77,7 +80,8 @@ private:
 
 	// User input
 	Vec2 m_mousePosition;
-	Vec3 m_cameraFocusPoint;
+	
+	Vec3 camPos;
 	float m_cameraPositionTheta;
 	float m_cameraPositionPhi;
 	float m_cameraRadius;
