@@ -35,7 +35,7 @@ private:
 	float outTimeShoot = 5;
 	int cptBall = 1;
 
-	std::vector<Body*> balls;
+	std::vector<Body> balls;
 
 	bool pass = false;
 

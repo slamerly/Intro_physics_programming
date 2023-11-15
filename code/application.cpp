@@ -96,6 +96,8 @@ void Application::Initialize() {
 
 	m_isPaused = true;
 	m_stepFrame = false;
+
+	std::cout << "Use \"SPACE\" to throw the ball.\nUse arrows up and down to set the power.\n";
 }
 
 /*

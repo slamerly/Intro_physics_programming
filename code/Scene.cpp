@@ -144,7 +144,7 @@ void Scene::Initialize() {
 			body.friction = 0.95f;
 			body.linearVelocity.Zero();
 			bodies.push_back(body);
-			balls.push_back(&body);
+			balls.push_back(body);
 		}
 	}
 
@@ -159,7 +159,7 @@ void Scene::Initialize() {
 	body.linearVelocity.Zero();
 	//body.ApplyImpulseLinear(Vec3(1, 0, 0));
 	bodies.push_back(body);
-	balls.push_back(&body);
+	balls.push_back(body);
 
 	currentBall = &bodies[bodies.size() - cptBall];
 
@@ -320,7 +320,7 @@ void Scene::Shoot()
 		Vec3 dir = app->m_cameraFocusPoint - pos;
 		dir.Normalize();
 
-		currentBall->orientation = Quat(dir, 0);
+		currentBall->orientation = Quat(dir, 1);
 		//std::cout << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
 		float t0, t1;
 
@@ -347,13 +347,13 @@ void Scene::EndRound()
 	std::vector<float> distances;
 	int pos = -1;
 
-	Body* cocho = balls[balls.size() - 1];
+	Body* cocho = &balls[balls.size() - 1];
 
 	for (int i = 0; i < balls.size()-1; i++)
 	{
-		float dist = sqrt(pow(balls[i]->position.x - cocho->position.x, 2) 
-			+ pow(balls[i]->position.y - cocho->position.y, 2) 
-			+ pow(balls[i]->position.z - cocho->position.z, 2));
+		float dist = sqrt(pow(cocho->position.x - balls[i].position.x, 2)
+			+ pow(cocho->position.y - balls[i].position.y, 2)
+			+ pow(cocho->position.z - balls[i].position.z, 2));
 
 		distances.push_back(dist);
 	}
