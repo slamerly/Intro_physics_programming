@@ -1,3 +1,5 @@
+This is a 4th-year project exploring physics concepts, with the final exercise involving the creation of a **petanque game** using a **Vulkan engine**.
+
 # VulkanRenderer
 
 ## Controls
